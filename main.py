@@ -79,6 +79,9 @@ for i in range(len(request_collection)):
         if r_json['tagline'] == "":
             r_json['tagline'] = "No"
 
+        if r_json['backdrop_path'] == "":
+            r_json['backdrop_path'] = "No"
+
         t.sleep(0.2)
         json_collection.append(r_json)
 
@@ -94,9 +97,8 @@ df_columns = ['adult', 'backdrop_path', 'belongs_to_collection', 'budget', 'genr
 # keeping no occurences
 
 df = pd.DataFrame(json_collection, columns=df_columns)
-t.sleep(1)
 df = df.drop_duplicates(subset=['id', ], keep=False).reset_index(drop=True)
-t.sleep(1)
+
 # Saving output in an excel file with StyleFrame
 
 print("[+] Saving Output")
@@ -110,4 +112,4 @@ sf.to_excel(excel_writer=writer, sheet_name="Movies", index=False, row_to_add_fi
 
 writer.save()
 
-print("[+] Done.")
+print("[+] Done")
