@@ -79,9 +79,6 @@ for i in range(len(request_collection)):
         if r_json['tagline'] == "":
             r_json['tagline'] = "No"
 
-        if r_json['backdrop_path'] == "":
-            r_json['backdrop_path'] = "No"
-
         t.sleep(0.2)
         json_collection.append(r_json)
 
