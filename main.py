@@ -12,8 +12,6 @@ from styleframe import StyleFrame
 # Setting API Parameters
 # https://developers.themoviedb.org/3/getting-started/authentication
 
-# movie_id = random.randint(500, 600)
-# movie_id = 50000
 api_key = "5c2033380838b0c5c07dd74211dae17d"
 api_version = 3
 api_base_url = f"https://api.themoviedb.org/{api_version}"
@@ -21,11 +19,11 @@ api_base_url = f"https://api.themoviedb.org/{api_version}"
 
 # GET request to the API using requests
 # Load requests in an array for later processing
+# Random movie id
 
 request_collection = []
-for i in range(200):
-    movie_id = random.randint(500, 1000)
-#    print("Random movie id: " + str(movie_id))
+for i in range(1000):
+    movie_id = random.randint(1, 1000)
     endpoint_path = f"/movie/{movie_id}"
     endpoint = f"{api_base_url}{endpoint_path}?api_key={api_key}"
     r = requests.get(endpoint).text
@@ -42,7 +40,6 @@ for i in range(len(request_collection)):
     r_json = json.loads(request_collection[i])
     try:
         if r_json['success'] is False:
-            print("[-] Request not valid, will skip")
             pass
     except KeyError as e:
         # Make dictionaries usable (hashable) by pandas
@@ -50,6 +47,9 @@ for i in range(len(request_collection)):
         for j in range(len(r_json['genres'])):
             genres += r_json['genres'][j]['name'] + ","
         r_json['genres'] = genres[:-1]
+
+        if r_json['genres'] == "":
+            r_json['genres'] = "No"
 
         production_companies = ""
         for k in range(len(r_json['production_companies'])):
@@ -72,6 +72,13 @@ for i in range(len(request_collection)):
             r_json['belongs_to_collection'] = belongs_to_collection
         else:
             r_json['belongs_to_collection'] = "No"
+
+        if r_json['homepage'] == "":
+            r_json['homepage'] = "No"
+
+        if r_json['tagline'] == "":
+            r_json['tagline'] = "No"
+
         t.sleep(0.2)
         json_collection.append(r_json)
 
@@ -83,11 +90,13 @@ df_columns = ['adult', 'backdrop_path', 'belongs_to_collection', 'budget', 'genr
               'production_countries', 'release_date', 'revenue', 'runtime', 'spoken_languages', 'status', 'tagline',
               'title', 'video', 'vote_average', 'vote_count']
 
-# Loading JSON data in the Data Frame and dropping duplicates (we are using a random movie ID ;) )
+# Loading JSON data in the Data Frame and dropping duplicates (we are using a random movie ID ;) ),
+# keeping no occurences
 
 df = pd.DataFrame(json_collection, columns=df_columns)
-df.drop_duplicates()
-
+t.sleep(1)
+df = df.drop_duplicates(subset=['id', ], keep=False).reset_index(drop=True)
+t.sleep(1)
 # Saving output in an excel file with StyleFrame
 
 print("[+] Saving Output")
