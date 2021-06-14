@@ -1,7 +1,10 @@
 # Build a movie DB using themoviedb.org API
+# Data is hosted in MySQL RDS AWS
 # Andrea Stefanachi, developer
 
 import json
+
+import numpy as np
 import requests
 import pandas as pd
 import time as t
@@ -22,7 +25,7 @@ api_base_url = f"https://api.themoviedb.org/{api_version}"
 # Random movie id
 
 request_collection = []
-for i in range(1000):
+for i in range(200):
     movie_id = random.randint(1, 1000)
     endpoint_path = f"/movie/{movie_id}"
     endpoint = f"{api_base_url}{endpoint_path}?api_key={api_key}"
@@ -86,7 +89,7 @@ print("[+] Text responses loaded as json in the json collection")
 
 # Setting up column names for the Data Frame
 df_columns = ['adult', 'backdrop_path', 'belongs_to_collection', 'budget', 'genres', 'homepage', 'id', 'imdb_id',
-              'original_language', 'original_title', 'overview', 'popularity', 'poster_path', 'production_companies',
+                  'original_language', 'original_title', 'overview', 'popularity', 'poster_path', 'production_companies',
               'production_countries', 'release_date', 'revenue', 'runtime', 'spoken_languages', 'status', 'tagline',
               'title', 'video', 'vote_average', 'vote_count']
 
@@ -108,5 +111,11 @@ writer = sf.ExcelWriter(file)
 sf.to_excel(excel_writer=writer, sheet_name="Movies", index=False, row_to_add_filters=0, best_fit=df_columns)
 
 writer.save()
+
+# Saving output as csv for Load Data Local Infile to AWS
+
+df = df.replace(r'^\s*$', np.NaN, regex=True)
+
+df.to_csv("output.csv", sep=";", index=False)
 
 print("[+] Done")
