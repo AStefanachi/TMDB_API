@@ -28,7 +28,7 @@ def get_new_movies():
 
     request_collection = []
     for i in range(1001):
-        movie_id = random.randint(1, 1000)
+        movie_id = random.randint(1, 10000)
         endpoint_path = f"/movie/{movie_id}"
         endpoint = f"{api_base_url}{endpoint_path}?api_key={api_key}"
         r = requests.get(endpoint).text
@@ -95,10 +95,11 @@ def get_new_movies():
             if r_json['genres'] == "":
                 r_json['genres'] = np.NaN
 
-                # Parsing overview for ; separator
-                overview = str(r_json['overview'])
-                overview = overview.strip(";")
-                r_json['overview'] = overview
+            # Parsing overview for ; separator
+            overview = str(r_json['overview'])
+            overview = overview.replace(';', '')
+            overview = overview.replace('"', '')
+            r_json['overview'] = overview
 
             json_collection.append(r_json)
 

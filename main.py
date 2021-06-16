@@ -29,7 +29,7 @@ print("[+] Saving Output")
 
 sf = StyleFrame(df)
 ts = t.strftime("%Y-%m-%d-%H%M%S")
-file = os.path.join(BASE_DIR, "output" + str(ts) + ".xlsx")
+file = os.path.join(EXCEL_DIR, "output" + str(ts) + ".xlsx")
 
 writer = sf.ExcelWriter(file)
 

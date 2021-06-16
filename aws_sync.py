@@ -2,7 +2,7 @@
 from controller import *
 import os
 import time as t
-import pandas as pd
+import shutil
 
 
 def aws_rds_sync():
@@ -131,3 +131,14 @@ def aws_rds_sync():
     except Exception as e:
         print("[-] Couldn't delete temporary table")
         print("[-] Error: {}".format(str(e)))
+
+    t.sleep(1)
+
+    move_file = os.path.join(BATCH_DIR, file)
+    if os.path.exists(move_file):
+
+        processed_file = shutil.move(move_file, PROCESSED_DIR)
+
+        print("[+] The %s is moved to location, %s " % (move_file, processed_file))
+    else:
+        print("[-] File doesn't exit")
