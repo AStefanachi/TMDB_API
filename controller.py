@@ -6,6 +6,7 @@ import numpy as np
 from config import *
 import mysql.connector
 
+
 def get_latest_file(path, *paths):
     # Get latest file in a folder using a search parameter *paths
 
