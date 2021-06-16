@@ -33,7 +33,7 @@ file = os.path.join(EXCEL_DIR, "output" + str(ts) + ".xlsx")
 
 writer = sf.ExcelWriter(file)
 
-sf.to_excel(excel_writer=writer, sheet_name="Movies", index=False, row_to_add_filters=0, best_fit=df_columns)
+sf.to_excel(excel_writer=writer, na_rep=np.NaN, sheet_name="Movies", index=False, row_to_add_filters=0, best_fit=df_columns)
 
 writer.save()
 

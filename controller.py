@@ -101,6 +101,9 @@ def get_new_movies():
             overview = overview.replace('"', '')
             r_json['overview'] = overview
 
+            if r_json['overview'] == "":
+                r_json['overview'] = np.NaN
+
             json_collection.append(r_json)
 
     print("[+] Text responses loaded as json in the json collection")
