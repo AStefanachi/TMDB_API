@@ -95,6 +95,11 @@ def get_new_movies():
             if r_json['genres'] == "":
                 r_json['genres'] = np.NaN
 
+                # Parsing overview for ; separator
+                overview = str(r_json['overview'])
+                overview = overview.strip(";")
+                r_json['overview'] = overview
+
             json_collection.append(r_json)
 
     print("[+] Text responses loaded as json in the json collection")

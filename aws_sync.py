@@ -4,6 +4,7 @@ import os
 import time as t
 import pandas as pd
 
+
 def aws_rds_sync():
 
     os.environ['LIBMYSQL_ENABLE_CLEARTEXT_PLUGIN'] = '1'
@@ -104,7 +105,7 @@ def aws_rds_sync():
             "status = tmp_movies.status, tagline = tmp_movies.tagline, " \
             "title = tmp_movies.title, video = tmp_movies.video, " \
             "vote_average = tmp_movies.vote_average, vote_count = tmp_movies.vote_count," \
-            "db_create = " + pd.Timestamp.now() + ";"
+            "db_create = tmp_movies.db_create;"
 
     try:
         conn = mysql.connector.connect(host=ENDPOINT, user=USR, passwd=PASS, port=PORT, database=DBNAME,
