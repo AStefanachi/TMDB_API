@@ -47,6 +47,19 @@ def get_new_movies():
             if r_json['success'] is False:
                 pass
         except KeyError:
+            # Adjusting components before loading
+
+            backdrop_url = "https://www.themoviedb.org/t/p/w1920_and_h800_multi_faces"
+            poster_url = "https://www.themoviedb.org/t/p/w600_and_h900_bestv2"
+
+            backdrop_path = str(r_json['backdrop_path'])
+            backdrop_path = backdrop_url + backdrop_path
+            r_json['backdrop_path'] = backdrop_path
+
+            poster_path = str(r_json['poster_path'])
+            poster_path = poster_url + poster_path
+            r_json['poster_path'] = poster_path
+
             # Make dictionaries usable (hashable) by pandas
             genres = ""
             for j in range(len(r_json['genres'])):
